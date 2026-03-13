@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d20">
+
+  <title>美股晚间行情</title>
+  <style>
+    /* 引入金融专用字体 */
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+    :root {
+      --bg-primary: radial-gradient(circle at center, #372121 0%, #000000 80%);
+      --bg-card: rgba(0, 0, 0, 0.1);
+      --bg-card-solid: #231710;
+      --card-glow: rgba(255, 255, 255, 0.1);
+      --text-primary: #f1f1f1;
+      --text-secondary: #aaaaaa;
+      --text-muted: #7b7b7b;
+      --accent-green: #00d29e;
+      --accent-red: #ff4756;
+      --accent-blue: #292cd1;
+      --accent-gold: #f5a623;
+      --border-color: rgba(224, 187, 187, 0.133);
+      --border-highlight: rgba(59, 130, 246, 0.3);
+      --red-glow: #ff4757;
+      --l-gap: 24px;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* font-family: "Noto Sans SC", "PingFang SC", "SF Pro Display", -apple-system, sans-serif; */
+      font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji","Noto Sans SC", "PingFang SC";
+      position: relative;
+      overflow: auto;
+      padding: 20px;
+    }
+
+    .bg-gradient-orb 
+    { 
+      
+      border-radius: 50%;
+      position: fixed;
+      width: 600px; 
+      height: 600px;
+      background: radial-gradient(circle, #102b560a, #270e4d12, #ff202028, transparent 110%);
+      top: -222px; left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    /* 背景装饰 - 金融风格网格 */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(146, 63, 63, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(146, 63, 63, 0.1) 1px, transparent 1px);
+      background-size: 46px 46px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* 背景主色容器 */
+    .bg-primary {
+      position: fixed;
+      top: -600px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-primary);
+      z-index: -2;
+    }
+    
+    .card {
+      gap: var(--l-gap);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-width: 480px;
+      max-width: 500px;
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 38px;
+      color: var(--text-primary);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    
+    /* 股票卡片专用样式 */
+    .stock-header { 
+      display: flex;
+      text-align: center; 
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: var(--l-gap);
+      /* margin-bottom: 20px;  */
+    }
+    
+    .stock-title { 
+      font-family: "Noto Sans SC", "PingFang SC", "SF Pro Display", -apple-system, sans-serif;
+      font-size: 45px; 
+      font-weight: 600; 
+      background: linear-gradient(130deg, rgba(255, 255, 255, 1) 30%, var(--text-muted) 150%);
+      background-clip: text;
+      background-size: 150% auto;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .market-summary { 
+      font-size: 16px; 
+      font-weight: 500;
+      text-align: center;
+      width: 300px;
+      background: linear-gradient(90deg, rgb(255, 255, 255) 20%, var(--text-secondary) 160%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-size: 100% auto;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .update-time {
+      margin-top: -24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    
+    }
+    
+    /* 指数区域 */
+    .index-container {
+      width: 100%;
+      margin-bottom: 0;
+    }
+    
+    .index-list { 
+      display: flex; 
+      justify-content: space-between; 
+      gap: 0px;
+    }
+    
+    .index-item { 
+      text-align: center; 
+      flex: 1;
+      padding: 14px 10px;
+      /* 暗黑玻璃拟态风格 */
+      background: rgba(115, 115, 115, 0.1);
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+      /* border-radius: 16px; */
+      /* border: 1px solid rgba(255, 255, 255, 0.08); */
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.237);
+      transition: all 0.2s ease;
+      /* 径向渐变光晕效果 - 每个卡片不同 */
+      background-image: radial-gradient(
+        circle at top right,
+        rgba(255, 255, 255, 0.05),
+        transparent 70%
+      );
+    }
+    
+    /* 为每个 index-item 添加独特的光晕颜色 */
+    .index-item:nth-child(1) {
+      background-image: linear-gradient(
+        20deg,
+        rgba(72, 26, 26, 0.106) 20%,rgba(55, 20, 24, 0.159) 40%,
+         rgba(216, 55, 77, 0.196)90%
+      );
+    }
+    
+    .index-item:nth-child(2) {
+      background-image: linear-gradient(
+        170deg,
+        rgba(55, 55, 55, 0.106) 0%,rgba(10, 47, 43, 0.159) 30%,
+         rgba(216, 55, 213, 0.196)100%
+      );
+    }
+    
+    .index-item:nth-child(3) {
+      background-image: radial-gradient(
+        circle at bottom right,
+        rgba(155, 155, 155, 0.151),
+        transparent 70%
+      );
+    }
+    
+    /* .index-item:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background-image: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.08),
+        transparent 70%
+      );
+    } */
+    
+    .index-name { 
+      font-size: 13px; 
+      color: var(--text-primary); 
+      font-weight: 500;
+    }
+    
+    .index-value { 
+      font-size: 24px; 
+      font-weight: 500; 
+      letter-spacing: 0.1px;
+      color: var(--text-primary); 
+      margin: 5.5px 0;
+    }
+    
+    .index-change { 
+      font-size: 13px; 
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    
+    .positive { color: var(--accent-green); }
+    .negative { color: var(--accent-red); }
+    .neutral { color: var(--text-secondary); }
+
+    /* 指数卡背景根据涨跌 */
+    .index-item.positive { 
+      /* 采用与第二个子项相似的绿色光晕 */
+      background-image: radial-gradient(
+        circle at 90% 100%,
+        rgba(31, 61, 171, 0.555) 0%,
+
+        rgba(12, 28, 71, 0.165) 100%
+      );
+    }
+    .index-item.negative { 
+      /* 采用与第一个子项相似的红色光晕 */
+      background-image: radial-gradient(
+        circle at 90% 10%,
+        rgba(177, 48, 80, 0.375) 0%,
+        rgba(30, 6, 6, 0.49) 100%
+      );
+    }
+    .index-item.neutral {
+      /* 采用与第一个子项相似的红色光晕 */
+      background-image: radial-gradient(
+        circle at 90% 0%,
+        rgba(143, 143, 143, 0.42) 0%,
+
+        rgba(27, 27, 27, 0.106) 100%
+      );
+    }
+    
+    /* 分割线 */
+    .divider { 
+      border: none; 
+      border-top: 1px solid var(--border-color); 
+      width: 100%;
+    }
+    .index-section {
+
+      display: flex;
+      flex-direction: column;
+      gap: var(--l-gap);
+    }
+    /* 区块标题 */
+    .section-title { 
+      font-size: 16px; 
+      margin-bottom: -16px;
+      color: var(--text-primary); 
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+/* margin-left: 15px; */
+
+    }
+    
+    /* 统一的 SVG 图标样式 - 内联 SVG */
+    .section-title svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--text-primary);
+      flex-shrink: 0;
+    }
+    
+    /* 股票列表 */
+    .stock-list { 
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      /* gap: 6px; */
+
+    }
+
+    .stock-item { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 6px;
+      background: linear-gradient(90deg, rgba(31, 61, 171, 0.465) 0%, rgba(19, 25, 95, 0.511) 87%);
+      /* border-radius: 5px; */
+      /* border: 1px solid #00000000; */
+    }
+    
+    .stock-name { 
+      display: flex;
+      gap: 4px;
+      align-items: center;
+
+      font-size: 12px; 
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-left: 2px;
+    }
+    
+    .stock-name .stock-symbol {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: -.3px;
+
+    }
+    
+    .stock-info {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .stock-price { 
+      font-size: 11px; 
+      color: var(--text-muted); 
+      letter-spacing: -.3px;
+      font-weight: 500;
+    }
+    
+    .stock-change { 
+      letter-spacing: -.3px;
+      font-size: 11px; 
+      font-weight: 500;
+      padding: 1px 1px;
+      border-radius: 4px;
+      min-width: 45px;
+      text-align: center;
+    }
+    
+    .stock-change.positive {
+      /* background: rgba(0, 210, 106, 0.15); */
+      color: var(--accent-green);
+    }
+    
+    .stock-change.negative {
+      /* background: rgba(255, 71, 87, 0.15); */
+      color: var(--accent-red);
+    }
+    
+    /* 异动板块特殊样式 */
+    .stock-item.flash {
+      background: linear-gradient(90deg, rgba(196, 84, 20, 0.397) 0, rgba(205, 108, 23, 0.194) 100%);
+      border-color: rgba(245, 165, 35, 0);
+    }
+    
+    
+    /* 观点区域 */
+    .opinion-section { 
+      margin-bottom: 16px; 
+    }
+    
+    .opinion-title { 
+      font-size: 13px; 
+      color: var(--accent-gold); 
+      margin-bottom: 12px; 
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .opinion-title::before {
+      content: '💡';
+    }
+    
+    .opinion-item { 
+      font-size: 13px; 
+      color: var(--text-primary); 
+      margin-bottom: 10px; 
+      line-height: 1.6;
+  
+    }
+    
+    .opinion-item:last-child { 
+      margin-bottom: 0; 
+    }
+    
+    .opinion-item.highlight {
+      border-left-color: var(--accent-green);
+      background: rgba(0, 210, 106, 0.05);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+    }
+    
+    /* 观点列表 */
+    .opinion-list { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0; 
+    }
+    
+    .opinion-list li { 
+      font-size: 13px; 
+      color: var(--text-primary); 
+      margin-bottom: 5px; 
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    
+    .opinion-list li:last-child { 
+      margin-bottom: 0; 
+    }
+    
+    .opinion-number { 
+      color: var(--accent-blue); 
+      font-weight: 600; 
+      font-family: "JetBrains Mono", monospace;
+      min-width: 1px;
+    }
+    
+    .opinion-list strong { 
+      color: var(--text-primary); 
+      font-weight: 500;
+    }
+    
+    /* 免责声明 */
+    .disclaimer { 
+      text-align: center; 
+      font-size: 10px; 
+      color: var(--text-muted); 
+      margin-top: 12px;
+      line-height: 1.5;
+
+      border-top: 1px solid var(--border-color);
+    }
+    
+    /* 统一的 SVG 图标样式 - 内联 SVG */
+    .section-title svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--text-primary);
+      flex-shrink: 0;
+    }
+    
+  </style>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-primary"></div>
+
+  <!-- <div class="bg-gradient-orb"></div> -->
+  
+  <script>
+    // 将每个指数项根据涨跌给出额外类名，便于背景着色
+    function updateIndexClasses() {
+      document.querySelectorAll('.index-item').forEach(item => {
+        const changeEl = item.querySelector('.index-change');
+        if (!changeEl) return;
+        const text = changeEl.textContent.trim();
+        // 删除"%"符号和"+"前缀，转为数字
+        const num = parseFloat(text.replace('%', '').replace('+', ''));
+        item.classList.remove('positive', 'negative', 'neutral');
+        changeEl.classList.remove('positive', 'negative', 'neutral');
+        if (isNaN(num)) {
+          item.classList.add('neutral');
+          changeEl.classList.add('neutral');
+        } else if (num > 0) {
+          item.classList.add('positive');
+          changeEl.classList.add('positive');
+        } else if (num < 0) {
+          item.classList.add('negative');
+          changeEl.classList.add('negative');
+        } else {
+          item.classList.add('neutral');
+          changeEl.classList.add('neutral');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateIndexClasses);
+  </script>
+
+  <div class="card">
+    <!-- 顶部区域 -->
+    <div class="stock-header">
+      <div class="stock-title">美股每日行情</div>
+      <div class="update-time">2026-03-11 13:00 (北京: 21:00)</div>
+      <div class="market-summary">今日三大指数小幅下跌，承压整理。热门科技股涨多跌少，7只上涨，1只下跌。</div>
+          <!-- 分割线 -->
+    <hr class="divider">
+      <div class="index-container">
+        <div class="index-list">
+          <div class="index-item">
+            <div class="index-name">标普500</div>
+            <div class="index-value">6704.98</div>
+            <div class="index-change negative">-0.16%</div>
+          </div>
+          <div class="index-item">
+            <div class="index-name">道琼斯</div>
+            <div class="index-value">46839.23</div>
+            <div class="index-change negative">+0.04%</div>
+          </div>
+          <div class="index-item">
+            <div class="index-name">纳斯达克</div>
+            <div class="index-value">22416.63</div>
+            <div class="index-change neutral">+0.0%</div>
+          </div>
+        </div>
+      </div>
+    <!-- 分割线 -->
+    <hr class="divider">
+    </div>
+    
+    <!-- section统一 -->
+    <div class="index-section">
+    <!-- 热门股票 -->
+    <div class="section-title hot-stocks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+        <path d="M3 3v18h18"/>
+        <path d="M7 14l4-4 4 4 5-5"/>
+      </svg>
+      热门股票
+    </div>
+    <div class="stock-list">
+      <div class="stock-item">
+        <span class="stock-name">苹果 <span class="stock-symbol">AAPL</span></span>
+        <span class="stock-info">
+          <span class="stock-price">260.83</span>
+          <span class="stock-change positive">+0.37%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">微软 <span class="stock-symbol">MSFT</span></span>
+        <span class="stock-info">
+          <span class="stock-price">405.76</span>
+          <span class="stock-change negative">-0.89%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">谷歌 <span class="stock-symbol">GOOGL</span></span>
+        <span class="stock-info">
+          <span class="stock-price">307.04</span>
+          <span class="stock-change positive">+0.22%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">亚马逊 <span class="stock-symbol">AMZN</span></span>
+        <span class="stock-info">
+          <span class="stock-price">214.33</span>
+          <span class="stock-change positive">+0.39%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">英伟达 <span class="stock-symbol">NVDA</span></span>
+        <span class="stock-info">
+          <span class="stock-price">184.77</span>
+          <span class="stock-change positive">+1.16%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">特斯拉 <span class="stock-symbol">TSLA</span></span>
+        <span class="stock-info">
+          <span class="stock-price">399.24</span>
+          <span class="stock-change positive">+0.14%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">Meta <span class="stock-symbol">META</span></span>
+        <span class="stock-info">
+          <span class="stock-price">654.07</span>
+          <span class="stock-change positive">+1.03%</span>
+        </span>
+      </div>
+      <div class="stock-item">
+        <span class="stock-name">AMD <span class="stock-symbol">AMD</span></span>
+        <span class="stock-info">
+          <span class="stock-price">203.23</span>
+          <span class="stock-change positive">+0.27%</span>
+        </span>
+      </div>
+    </div>
+    
+    <!-- 股价异动板块 -->
+    <div class="section-title flash-stock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      股价异动
+    </div>
+    <div class="stock-list">
+      <div class="stock-item flash">
+        <span class="stock-name">GameStop <span class="stock-symbol">GME</span></span>
+        <span class="stock-info">
+          <span class="stock-price">24.37</span>
+          <span class="stock-change negative">-1.73%</span>
+        </span>
+      </div>
+      <div class="stock-item flash">
+        <span class="stock-name">AMC <span class="stock-symbol">AMC</span></span>
+        <span class="stock-info">
+          <span class="stock-price">1.11</span>
+          <span class="stock-change negative">-1.77%</span>
+        </span>
+      </div>
+      <div class="stock-item flash">
+        <span class="stock-name">Rivian <span class="stock-symbol">RIVN</span></span>
+        <span class="stock-info">
+          <span class="stock-price">16.54</span>
+          <span class="stock-change positive">+4.22%</span>
+        </span>
+      </div>
+    </div>
+    
+    <!-- 分割线 -->
+    <hr class="divider">
+    
+    <!-- 本周行情综述 -->
+    <div class="section-title weekly-summary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <path d="M3 9h18"/>
+        <path d="M9 21V9"/>
+      </svg>
+      本周行情综述
+    </div>
+    <div class="opinion-section">
+      <div class="opinion-item">本周市场整体承压，科技股回调明显</div>
+    </div>
+    
+    <!-- 来福观察 -->
+    <div class="section-title lafu-observation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      建议观察
+    </div>
+    <div class="opinion-section">
+      <ul class="opinion-list">
+        <li><span class="opinion-number">1.</span><strong>估值太高</strong> - S&P 500 PE接近30倍，泡沫明显</li>
+        <li><span class="opinion-number">2.</span><strong>科技股乏力</strong> - AI概念退潮，微软苹果回调是信号</li>
+        <li><span class="opinion-number">3.</span><strong>操作建议：</strong> 涨幅大的科技股可分批减仓，等6600以下再考虑建仓</li>
+      </ul>
+    </div>
+    </div>
+    <!-- 免责声明 -->
+    <div class="disclaimer">
+      本页面数据仅供参考，不构成投资建议
+    </div>
+  </div>
+</body>
+</html>
