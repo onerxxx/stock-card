@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b1a">
+  <title>美股晚间行情 · 霓虹深色版</title>
+  <style>
+    :root {
+      --bg: #070a17;
+      --bg-card: rgba(11, 17, 34, 0.78);
+      --line: rgba(114, 138, 255, 0.24);
+      --text: #f5f7ff;
+      --text-soft: #9da8cc;
+      --up: #31e4a5;
+      --down: #ff5f7a;
+      --flat: #9aa4c8;
+      --accent: #6d7bff;
+      --accent-2: #34c4ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: "Inter", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(109,123,255,0.22), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(52,196,255,0.2), transparent 35%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+    .panel {
+      width: min(980px, 100%);
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+      overflow: hidden;
+    }
+    .header {
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+    }
+    .title-wrap { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    h1 { font-size: 34px; letter-spacing: .3px; }
+    .time { color: var(--text-soft); font-size: 13px; }
+    .summary { color: #c9d2f7; font-size: 15px; line-height: 1.5; max-width: 760px; }
+
+    .indexes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .index-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(130deg, rgba(109,123,255,0.15), rgba(17,25,48,0.45));
+    }
+    .index-name { font-size: 12px; color: var(--text-soft); }
+    .index-value { font-size: 28px; font-weight: 700; margin: 6px 0; }
+    .chg { font-size: 13px; font-weight: 700; }
+    .up { color: var(--up); }
+    .down { color: var(--down); }
+    .flat { color: var(--flat); }
+
+    .body {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 18px;
+      padding: 22px 28px 26px;
+    }
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(8, 12, 26, 0.45);
+    }
+    .section h2 { font-size: 16px; margin-bottom: 12px; color: #d8e0ff; }
+
+    .stock-grid {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .stock-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(114, 138, 255, 0.28);
+      border-radius: 10px;
+      background: rgba(12, 19, 37, 0.7);
+    }
+    .name { font-size: 13px; font-weight: 600; }
+    .symbol { font-size: 11px; color: var(--text-soft); margin-left: 4px; }
+    .meta { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .price { color: #b7c3f2; }
+
+    .flash .stock-item { background: rgba(42, 24, 12, 0.62); border-color: rgba(245,166,35,0.35); }
+    .notes { list-style: none; display: grid; gap: 10px; font-size: 13px; color: #d9e0ff; line-height: 1.5; }
+    .notes li { padding: 10px; border-radius: 10px; background: rgba(16, 24, 46, 0.65); border: 1px solid rgba(114, 138, 255, 0.2); }
+
+    .foot {
+      border-top: 1px solid var(--line);
+      color: var(--text-soft);
+      font-size: 12px;
+      text-align: center;
+      padding: 12px 20px;
+    }
+
+    @media (max-width: 860px) {
+      .body { grid-template-columns: 1fr; }
+      .stock-grid { grid-template-columns: 1fr; }
+      .indexes { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <header class="header">
+      <div class="title-wrap">
+        <h1>美股每日行情</h1>
+        <time class="time" datetime="2026-03-11T13:00:00+08:00">2026-03-11 13:00（北京 21:00）</time>
+      </div>
+      <p class="summary">今日三大指数小幅下跌，热门科技股韧性仍在。短线资金偏向高流动性龙头，盘面呈现结构性分化。</p>
+      <section class="indexes" aria-label="三大指数">
+        <article class="index-card"><div class="index-name">标普500</div><div class="index-value">6704.98</div><div class="chg down">-0.16%</div></article>
+        <article class="index-card"><div class="index-name">道琼斯</div><div class="index-value">46839.23</div><div class="chg up">+0.04%</div></article>
+        <article class="index-card"><div class="index-name">纳斯达克</div><div class="index-value">22416.63</div><div class="chg flat">+0.00%</div></article>
+      </section>
+    </header>
+
+    <section class="body">
+      <section class="section">
+        <h2>热门股票</h2>
+        <ul class="stock-grid">
+          <li class="stock-item"><span class="name">苹果<span class="symbol">AAPL</span></span><span class="meta"><span class="price">260.83</span><span class="chg up">+0.37%</span></span></li>
+          <li class="stock-item"><span class="name">微软<span class="symbol">MSFT</span></span><span class="meta"><span class="price">405.76</span><span class="chg down">-0.89%</span></span></li>
+          <li class="stock-item"><span class="name">谷歌<span class="symbol">GOOGL</span></span><span class="meta"><span class="price">307.04</span><span class="chg up">+0.22%</span></span></li>
+          <li class="stock-item"><span class="name">亚马逊<span class="symbol">AMZN</span></span><span class="meta"><span class="price">214.33</span><span class="chg up">+0.39%</span></span></li>
+          <li class="stock-item"><span class="name">英伟达<span class="symbol">NVDA</span></span><span class="meta"><span class="price">184.77</span><span class="chg up">+1.16%</span></span></li>
+          <li class="stock-item"><span class="name">特斯拉<span class="symbol">TSLA</span></span><span class="meta"><span class="price">399.24</span><span class="chg up">+0.14%</span></span></li>
+        </ul>
+      </section>
+
+      <aside class="section">
+        <h2>股价异动</h2>
+        <ul class="stock-grid flash">
+          <li class="stock-item"><span class="name">GameStop<span class="symbol">GME</span></span><span class="meta"><span class="price">24.37</span><span class="chg down">-1.73%</span></span></li>
+          <li class="stock-item"><span class="name">AMC<span class="symbol">AMC</span></span><span class="meta"><span class="price">1.11</span><span class="chg down">-1.77%</span></span></li>
+          <li class="stock-item"><span class="name">Rivian<span class="symbol">RIVN</span></span><span class="meta"><span class="price">16.54</span><span class="chg up">+4.22%</span></span></li>
+        </ul>
+        <h2 style="margin-top:14px;">建议观察</h2>
+        <ul class="notes">
+          <li><strong>估值高位：</strong> S&P 500 估值仍处高分位，需警惕回撤放大。</li>
+          <li><strong>风格切换：</strong> AI 主线降温后，资金更偏向高现金流标的。</li>
+          <li><strong>操作节奏：</strong> 逢高分批止盈，等待更优风险收益比区间。</li>
+        </ul>
+      </aside>
+    </section>
+
+    <footer class="foot">本页面数据仅供参考，不构成投资建议。</footer>
+  </main>
+</body>
+</html>
