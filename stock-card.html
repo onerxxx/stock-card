@@ -461,6 +461,7 @@
     }
     
   </style>
+</head>
 <body>
   <div class="bg-grid"></div>
   <div class="bg-primary"></div>
@@ -497,173 +498,173 @@
     document.addEventListener('DOMContentLoaded', updateIndexClasses);
   </script>
 
-  <div class="card">
+  <main class="card" aria-label="美股晚间行情卡片">
     <!-- 顶部区域 -->
-    <div class="stock-header">
-      <div class="stock-title">美股每日行情</div>
-      <div class="update-time">2026-03-11 13:00 (北京: 21:00)</div>
-      <div class="market-summary">今日三大指数小幅下跌，承压整理。热门科技股涨多跌少，7只上涨，1只下跌。</div>
+    <header class="stock-header">
+      <h1 class="stock-title">美股每日行情</h1>
+      <time class="update-time" datetime="2026-03-11T13:00:00+08:00">2026-03-11 13:00 (北京: 21:00)</time>
+      <p class="market-summary">今日三大指数小幅下跌，承压整理。热门科技股涨多跌少，7只上涨，1只下跌。</p>
           <!-- 分割线 -->
     <hr class="divider">
-      <div class="index-container">
-        <div class="index-list">
-          <div class="index-item">
+      <section class="index-container" aria-label="三大指数">
+        <div class="index-list" role="list">
+          <article class="index-item" role="listitem" aria-label="标普500">
             <div class="index-name">标普500</div>
             <div class="index-value">6704.98</div>
             <div class="index-change negative">-0.16%</div>
-          </div>
-          <div class="index-item">
+          </article>
+          <article class="index-item" role="listitem" aria-label="道琼斯">
             <div class="index-name">道琼斯</div>
             <div class="index-value">46839.23</div>
-            <div class="index-change negative">+0.04%</div>
-          </div>
-          <div class="index-item">
+            <div class="index-change positive">+0.04%</div>
+          </article>
+          <article class="index-item" role="listitem" aria-label="纳斯达克">
             <div class="index-name">纳斯达克</div>
             <div class="index-value">22416.63</div>
             <div class="index-change neutral">+0.0%</div>
-          </div>
+          </article>
         </div>
-      </div>
+      </section>
     <!-- 分割线 -->
     <hr class="divider">
-    </div>
+    </header>
     
     <!-- section统一 -->
-    <div class="index-section">
+    <section class="index-section" aria-label="行情板块">
     <!-- 热门股票 -->
-    <div class="section-title hot-stocks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+    <h2 class="section-title hot-stocks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <path d="M3 3v18h18"/>
         <path d="M7 14l4-4 4 4 5-5"/>
       </svg>
       热门股票
-    </div>
-    <div class="stock-list">
-      <div class="stock-item">
+    </h2>
+    <div class="stock-list" role="list" aria-label="热门股票列表">
+      <article class="stock-item" role="listitem">
         <span class="stock-name">苹果 <span class="stock-symbol">AAPL</span></span>
         <span class="stock-info">
           <span class="stock-price">260.83</span>
           <span class="stock-change positive">+0.37%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">微软 <span class="stock-symbol">MSFT</span></span>
         <span class="stock-info">
           <span class="stock-price">405.76</span>
           <span class="stock-change negative">-0.89%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">谷歌 <span class="stock-symbol">GOOGL</span></span>
         <span class="stock-info">
           <span class="stock-price">307.04</span>
           <span class="stock-change positive">+0.22%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">亚马逊 <span class="stock-symbol">AMZN</span></span>
         <span class="stock-info">
           <span class="stock-price">214.33</span>
           <span class="stock-change positive">+0.39%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">英伟达 <span class="stock-symbol">NVDA</span></span>
         <span class="stock-info">
           <span class="stock-price">184.77</span>
           <span class="stock-change positive">+1.16%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">特斯拉 <span class="stock-symbol">TSLA</span></span>
         <span class="stock-info">
           <span class="stock-price">399.24</span>
           <span class="stock-change positive">+0.14%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">Meta <span class="stock-symbol">META</span></span>
         <span class="stock-info">
           <span class="stock-price">654.07</span>
           <span class="stock-change positive">+1.03%</span>
         </span>
-      </div>
-      <div class="stock-item">
+      </article>
+      <article class="stock-item" role="listitem">
         <span class="stock-name">AMD <span class="stock-symbol">AMD</span></span>
         <span class="stock-info">
           <span class="stock-price">203.23</span>
           <span class="stock-change positive">+0.27%</span>
         </span>
-      </div>
+      </article>
     </div>
     
     <!-- 股价异动板块 -->
-    <div class="section-title flash-stock">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+    <h2 class="section-title flash-stock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
       股价异动
-    </div>
-    <div class="stock-list">
-      <div class="stock-item flash">
+    </h2>
+    <div class="stock-list" role="list" aria-label="股价异动列表">
+      <article class="stock-item flash" role="listitem">
         <span class="stock-name">GameStop <span class="stock-symbol">GME</span></span>
         <span class="stock-info">
           <span class="stock-price">24.37</span>
           <span class="stock-change negative">-1.73%</span>
         </span>
-      </div>
-      <div class="stock-item flash">
+      </article>
+      <article class="stock-item flash" role="listitem">
         <span class="stock-name">AMC <span class="stock-symbol">AMC</span></span>
         <span class="stock-info">
           <span class="stock-price">1.11</span>
           <span class="stock-change negative">-1.77%</span>
         </span>
-      </div>
-      <div class="stock-item flash">
+      </article>
+      <article class="stock-item flash" role="listitem">
         <span class="stock-name">Rivian <span class="stock-symbol">RIVN</span></span>
         <span class="stock-info">
           <span class="stock-price">16.54</span>
           <span class="stock-change positive">+4.22%</span>
         </span>
-      </div>
+      </article>
     </div>
     
     <!-- 分割线 -->
     <hr class="divider">
     
     <!-- 本周行情综述 -->
-    <div class="section-title weekly-summary">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+    <h2 class="section-title weekly-summary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <path d="M3 9h18"/>
         <path d="M9 21V9"/>
       </svg>
       本周行情综述
-    </div>
-    <div class="opinion-section">
-      <div class="opinion-item">本周市场整体承压，科技股回调明显</div>
-    </div>
+    </h2>
+    <section class="opinion-section" aria-label="本周行情综述内容">
+      <p class="opinion-item">本周市场整体承压，科技股回调明显</p>
+    </section>
     
     <!-- 来福观察 -->
-    <div class="section-title lafu-observation">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round">
+    <h2 class="section-title lafu-observation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
         <circle cx="12" cy="12" r="3"/>
       </svg>
       建议观察
-    </div>
-    <div class="opinion-section">
+    </h2>
+    <section class="opinion-section" aria-label="建议观察内容">
       <ul class="opinion-list">
         <li><span class="opinion-number">1.</span><strong>估值太高</strong> - S&P 500 PE接近30倍，泡沫明显</li>
         <li><span class="opinion-number">2.</span><strong>科技股乏力</strong> - AI概念退潮，微软苹果回调是信号</li>
         <li><span class="opinion-number">3.</span><strong>操作建议：</strong> 涨幅大的科技股可分批减仓，等6600以下再考虑建仓</li>
       </ul>
-    </div>
-    </div>
+    </section>
+    </section>
     <!-- 免责声明 -->
-    <div class="disclaimer">
+    <footer class="disclaimer">
       本页面数据仅供参考，不构成投资建议
-    </div>
-  </div>
+    </footer>
+  </main>
 </body>
 </html>
