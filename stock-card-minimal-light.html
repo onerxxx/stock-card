@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>美股晚间行情 · 极简专业版</title>
+  <style>
+    :root {
+      --bg: #f2f5fb;
+      --card: #ffffff;
+      --line: #e5ebf5;
+      --text: #0f1a2e;
+      --muted: #66758f;
+      --up: #0ba66b;
+      --down: #d23d57;
+      --flat: #6e7b94;
+      --accent: #2459f3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8faff, var(--bg));
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .wrap {
+      max-width: 1020px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(19, 37, 77, 0.06);
+    }
+    .header {
+      padding: 22px 24px;
+      display: grid;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .top { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+    h1 { font-size: 30px; letter-spacing: .2px; }
+    .time { font-size: 12px; color: var(--muted); }
+    .desc { font-size: 14px; color: #3a4a66; line-height: 1.6; }
+
+    .indices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .index {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fbfdff;
+    }
+    .index .k { font-size: 12px; color: var(--muted); }
+    .index .v { font-size: 26px; font-weight: 700; margin: 5px 0; }
+    .index .c { font-size: 12px; font-weight: 700; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 16px;
+      padding: 16px 24px 24px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .panel h2 {
+      font-size: 15px;
+      padding: 12px 14px;
+      background: #f8fbff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rows { list-style: none; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .row:last-child { border-bottom: none; }
+    .symbol { color: var(--muted); font-size: 11px; margin-left: 6px; }
+    .price { color: var(--muted); }
+    .up { color: var(--up); }
+    .down { color: var(--down); }
+    .flat { color: var(--flat); }
+
+    .note {
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #30415f;
+      border-bottom: 1px solid var(--line);
+    }
+    .note:last-child { border-bottom: none; }
+    .tag {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #eaf0ff;
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
+    .foot {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 12px 16px 18px;
+    }
+
+    @media (max-width: 860px) {
+      .indices, .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <header class="header">
+        <div class="top">
+          <h1>美股每日行情</h1>
+          <time class="time" datetime="2026-03-11T13:00:00+08:00">更新时间：2026-03-11 13:00（北京 21:00）</time>
+        </div>
+        <p class="desc">指数震荡偏弱但结构仍有亮点，龙头科技股分化明显。短线更建议关注仓位控制与交易节奏。</p>
+        <div class="indices">
+          <article class="index"><div class="k">标普500</div><div class="v">6704.98</div><div class="c down">-0.16%</div></article>
+          <article class="index"><div class="k">道琼斯</div><div class="v">46839.23</div><div class="c up">+0.04%</div></article>
+          <article class="index"><div class="k">纳斯达克</div><div class="v">22416.63</div><div class="c flat">+0.00%</div></article>
+        </div>
+      </header>
+
+      <section class="grid">
+        <section class="panel">
+          <h2>热门股票</h2>
+          <ul class="rows">
+            <li class="row"><span>苹果<span class="symbol">AAPL</span></span><span class="price">260.83</span><strong class="up">+0.37%</strong></li>
+            <li class="row"><span>微软<span class="symbol">MSFT</span></span><span class="price">405.76</span><strong class="down">-0.89%</strong></li>
+            <li class="row"><span>谷歌<span class="symbol">GOOGL</span></span><span class="price">307.04</span><strong class="up">+0.22%</strong></li>
+            <li class="row"><span>亚马逊<span class="symbol">AMZN</span></span><span class="price">214.33</span><strong class="up">+0.39%</strong></li>
+            <li class="row"><span>英伟达<span class="symbol">NVDA</span></span><span class="price">184.77</span><strong class="up">+1.16%</strong></li>
+            <li class="row"><span>特斯拉<span class="symbol">TSLA</span></span><span class="price">399.24</span><strong class="up">+0.14%</strong></li>
+            <li class="row"><span>Meta<span class="symbol">META</span></span><span class="price">654.07</span><strong class="up">+1.03%</strong></li>
+            <li class="row"><span>AMD<span class="symbol">AMD</span></span><span class="price">203.23</span><strong class="up">+0.27%</strong></li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>异动与观察</h2>
+          <ul class="rows">
+            <li class="row"><span>GameStop<span class="symbol">GME</span></span><span class="price">24.37</span><strong class="down">-1.73%</strong></li>
+            <li class="row"><span>AMC<span class="symbol">AMC</span></span><span class="price">1.11</span><strong class="down">-1.77%</strong></li>
+            <li class="row"><span>Rivian<span class="symbol">RIVN</span></span><span class="price">16.54</span><strong class="up">+4.22%</strong></li>
+          </ul>
+          <p class="note"><span class="tag">周评</span>市场整体承压，科技股波动增大，注意控制回撤。</p>
+          <p class="note"><span class="tag">观察</span>估值与业绩错配风险仍在，建议分批交易、避免追高。</p>
+          <p class="note"><span class="tag">策略</span>高位股逢强减仓，等待关键指数更优入场区间。</p>
+        </section>
+      </section>
+
+      <footer class="foot">本页面数据仅供参考，不构成投资建议。</footer>
+    </section>
+  </main>
+</body>
+</html>
