@@ -3,6 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f9fe">
+  <title>美股晚间行情 · Editorial Light</title>
+  <style>
+    :root {
+      --bg: #f2f5fc;
+      --paper: #ffffff;
+      --line: #dde5f2;
+      --ink: #111a2e;
+      --muted: #687a98;
+      --up: #0f9d6a;
+      --down: #d44762;
+      --flat: #6f809e;
+      --accent: #2d5fff;
+      --accent-soft: #eef3ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      padding: 28px;
+      font-family: "SF Pro Display", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 88% 10%, rgba(45,95,255,.12), transparent 30%),
+        radial-gradient(circle at 4% 100%, rgba(15,157,106,.08), transparent 24%),
+        var(--bg);
+    }
+
+    .sheet {
+      max-width: 1080px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 16px 45px rgba(23, 45, 93, .08);
+      overflow: hidden;
+    }
+
+    .masthead {
+      padding: 24px 28px 18px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      background: linear-gradient(180deg, #fbfcff, #fff);
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 38px);
+      letter-spacing: .2px;
+      line-height: 1.05;
+    }
+    .edition {
+      font-size: 12px;
+      color: var(--accent);
+      border: 1px solid #bfd0ff;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 600;
+    }
+    .time { font-size: 12px; color: var(--muted); }
+    .lead {
+      color: #35486d;
+      line-height: 1.65;
+      font-size: 14px;
+      max-width: 860px;
+    }
+
+    .stats {
   <meta name="theme-color" content="#f4f7fb">
   <title>美股晚间行情 · 极简专业版</title>
   <style>
@@ -53,6 +128,36 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px;
+      background: #fcfdff;
+    }
+    .stat .k { font-size: 12px; color: var(--muted); }
+    .stat .v { font-size: 28px; font-weight: 700; margin: 6px 0 4px; }
+    .stat .c { font-size: 12px; font-weight: 700; }
+    .up { color: var(--up); }
+    .down { color: var(--down); }
+    .flat { color: var(--flat); }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 16px;
+      padding: 18px 28px 24px;
+    }
+    .module {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .module h2 {
+      font-size: 15px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #f9fbff;
     .index {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -85,6 +190,55 @@
     .row {
       display: grid;
       grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid #edf2fb;
+    }
+    .row:last-child { border-bottom: none; }
+    .name { font-weight: 600; }
+    .symbol { margin-left: 6px; font-size: 11px; color: var(--muted); }
+    .price { color: var(--muted); }
+
+    .editorial {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      background: #fcfdff;
+    }
+    .quote {
+      border: 1px solid #e3eafb;
+      border-radius: 12px;
+      padding: 11px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #344b73;
+      background: #fff;
+    }
+    .label {
+      display: inline-block;
+      margin-right: 6px;
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: #e9f8f2;
+      color: #0e9464;
+      font-weight: 700;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 12px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      background: #fbfcff;
+    }
+
+    @media (max-width: 920px) {
+      .stats, .content { grid-template-columns: 1fr; }
+      .masthead, .content { padding-left: 16px; padding-right: 16px; }
       gap: 10px;
       align-items: center;
       padding: 10px 14px;
@@ -130,6 +284,54 @@
   </style>
 </head>
 <body>
+  <main class="sheet">
+    <header class="masthead">
+      <div class="title-row">
+        <div>
+          <h1>美股每日行情</h1>
+          <p class="time"><time datetime="2026-03-11T13:00:00+08:00">2026-03-11 13:00（北京 21:00）</time></p>
+        </div>
+        <span class="edition">EDITORIAL BRIEF</span>
+      </div>
+      <p class="lead">指数延续震荡，资金风格趋于保守。高波动题材热度回落后，市场更偏好基本面扎实、现金流稳定的核心资产。</p>
+      <section class="stats" aria-label="三大指数概览">
+        <article class="stat"><div class="k">标普500</div><div class="v">6704.98</div><div class="c down">-0.16%</div></article>
+        <article class="stat"><div class="k">道琼斯</div><div class="v">46839.23</div><div class="c up">+0.04%</div></article>
+        <article class="stat"><div class="k">纳斯达克</div><div class="v">22416.63</div><div class="c flat">+0.00%</div></article>
+      </section>
+    </header>
+
+    <section class="content">
+      <section class="module">
+        <h2>热门股票</h2>
+        <ul class="rows">
+          <li class="row"><span class="name">苹果<span class="symbol">AAPL</span></span><span class="price">260.83</span><strong class="up">+0.37%</strong></li>
+          <li class="row"><span class="name">微软<span class="symbol">MSFT</span></span><span class="price">405.76</span><strong class="down">-0.89%</strong></li>
+          <li class="row"><span class="name">谷歌<span class="symbol">GOOGL</span></span><span class="price">307.04</span><strong class="up">+0.22%</strong></li>
+          <li class="row"><span class="name">亚马逊<span class="symbol">AMZN</span></span><span class="price">214.33</span><strong class="up">+0.39%</strong></li>
+          <li class="row"><span class="name">英伟达<span class="symbol">NVDA</span></span><span class="price">184.77</span><strong class="up">+1.16%</strong></li>
+          <li class="row"><span class="name">特斯拉<span class="symbol">TSLA</span></span><span class="price">399.24</span><strong class="up">+0.14%</strong></li>
+          <li class="row"><span class="name">Meta<span class="symbol">META</span></span><span class="price">654.07</span><strong class="up">+1.03%</strong></li>
+          <li class="row"><span class="name">AMD<span class="symbol">AMD</span></span><span class="price">203.23</span><strong class="up">+0.27%</strong></li>
+        </ul>
+      </section>
+
+      <aside class="module">
+        <h2>异动与观察</h2>
+        <ul class="rows">
+          <li class="row"><span class="name">GameStop<span class="symbol">GME</span></span><span class="price">24.37</span><strong class="down">-1.73%</strong></li>
+          <li class="row"><span class="name">AMC<span class="symbol">AMC</span></span><span class="price">1.11</span><strong class="down">-1.77%</strong></li>
+          <li class="row"><span class="name">Rivian<span class="symbol">RIVN</span></span><span class="price">16.54</span><strong class="up">+4.22%</strong></li>
+        </ul>
+        <div class="editorial">
+          <p class="quote"><span class="label">估值</span>估值与盈利增速的匹配度仍是核心变量，建议优先观察业绩确认窗口。</p>
+          <p class="quote"><span class="label">策略</span>高位资产可分段止盈，等待市场回到更优风险回报区间后再加仓。</p>
+          <p class="quote"><span class="label">风格</span>行业内部“强者恒强”特征增强，配置上建议偏向龙头与现金流资产。</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">本页面数据仅供参考，不构成投资建议。</footer>
   <main class="wrap">
     <section class="card">
       <header class="header">

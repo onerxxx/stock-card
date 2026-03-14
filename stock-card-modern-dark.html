@@ -3,6 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050711">
+  <title>美股晚间行情 · Designer Night Shift</title>
+  <style>
+    :root {
+      --bg: #050711;
+      --surface: rgba(10, 15, 32, 0.74);
+      --surface-2: rgba(15, 22, 44, 0.8);
+      --line: rgba(124, 143, 255, 0.28);
+      --text: #eef2ff;
+      --muted: #94a3cf;
+      --up: #20d6a1;
+      --down: #ff6482;
+      --flat: #9ea9cb;
+      --hot: #ffb347;
+      --violet: #6f7dff;
+      --cyan: #38d8ff;
+    }
+
   <meta name="theme-color" content="#090b1a">
   <title>美股晚间行情 · 霓虹深色版</title>
   <style>
@@ -24,6 +42,102 @@
       font-family: "Inter", "Noto Sans SC", system-ui, sans-serif;
       color: var(--text);
       background:
+        radial-gradient(circle at 6% 12%, rgba(111, 125, 255, 0.34), transparent 32%),
+        radial-gradient(circle at 88% 8%, rgba(56, 216, 255, 0.25), transparent 28%),
+        radial-gradient(circle at 56% 84%, rgba(255, 100, 130, 0.2), transparent 34%),
+        var(--bg);
+      padding: 30px;
+      display: grid;
+      place-items: center;
+    }
+
+    .noise,
+    .glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .noise {
+      opacity: 0.12;
+      background-image: radial-gradient(rgba(255,255,255,.38) 0.45px, transparent 0.45px);
+      background-size: 3px 3px;
+      mix-blend-mode: soft-light;
+    }
+    .glow {
+      background: linear-gradient(120deg, rgba(111,125,255,.06), rgba(56,216,255,.04), rgba(255,100,130,.06));
+      filter: blur(26px);
+    }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      width: min(1080px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 100px rgba(0,0,0,.5);
+      overflow: hidden;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 24px;
+      padding: 10px 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(111,125,255,.2), rgba(56,216,255,.12));
+      font-size: 12px;
+      color: #dbe2ff;
+      white-space: nowrap;
+      overflow: auto;
+      scrollbar-width: none;
+    }
+    .ticker::-webkit-scrollbar { display: none; }
+
+    .hero {
+      padding: 30px 30px 20px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 16px;
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: .4px;
+      line-height: 1.1;
+      background: linear-gradient(120deg, #f7f9ff 30%, #9ec8ff 100%);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .meta {
+      display: grid;
+      justify-items: end;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .pill {
+      border: 1px solid rgba(56,216,255,.3);
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(18, 39, 66, .6);
+      color: #bceeff;
+    }
+    .summary {
+      color: #c8d2ff;
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 840px;
+    }
+
+    .index-grid {
         radial-gradient(circle at 15% 20%, rgba(109,123,255,0.22), transparent 40%),
         radial-gradient(circle at 80% 0%, rgba(52,196,255,0.2), transparent 35%),
         var(--bg);
@@ -59,6 +173,14 @@
     .index-card {
       border: 1px solid var(--line);
       border-radius: 14px;
+      padding: 12px;
+      background: var(--surface-2);
+      display: grid;
+      gap: 6px;
+    }
+    .index-k { font-size: 12px; color: var(--muted); }
+    .index-v { font-size: 30px; font-weight: 700; letter-spacing: .2px; }
+    .change { font-size: 12px; font-weight: 700; }
       padding: 14px;
       background: linear-gradient(130deg, rgba(109,123,255,0.15), rgba(17,25,48,0.45));
     }
@@ -69,6 +191,80 @@
     .down { color: var(--down); }
     .flat { color: var(--flat); }
 
+    .layout {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 18px;
+      padding: 20px 30px 26px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(9,14,30,.78);
+      overflow: hidden;
+    }
+    .card h2 {
+      padding: 12px 14px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(111,125,255,.2), rgba(111,125,255,.04));
+      letter-spacing: .2px;
+    }
+
+    .rows { list-style: none; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(124,143,255,.18);
+      font-size: 13px;
+    }
+    .row:last-child { border-bottom: none; }
+    .name { font-weight: 600; }
+    .symbol { margin-left: 6px; font-size: 11px; color: var(--muted); }
+    .price { color: #bdc9f2; }
+
+    .flash .row { background: linear-gradient(90deg, rgba(91,52,18,.32), transparent); }
+
+    .insights {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      background: rgba(8, 12, 24, .55);
+    }
+    .insight {
+      border: 1px solid rgba(124,143,255,.2);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #d2dbff;
+      background: rgba(16, 22, 41, .75);
+    }
+    .badge {
+      display: inline-block;
+      margin-right: 6px;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 1px 8px;
+      color: #151927;
+      background: linear-gradient(90deg, #92f2d3, #88d5ff);
+      font-weight: 700;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      text-align: center;
+      padding: 11px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .index-grid, .layout { grid-template-columns: 1fr; }
+      .hero, .layout { padding-left: 18px; padding-right: 18px; }
     .body {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -124,6 +320,79 @@
   </style>
 </head>
 <body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main class="stage">
+    <div class="ticker" aria-label="市场焦点快讯">
+      <span>NASDAQ FUTURE +0.18%</span>
+      <span>US10Y 4.21%</span>
+      <span>DXY 104.28</span>
+      <span>VIX 17.94</span>
+      <span>WTI $77.62</span>
+      <span>BTC $68,940</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-top">
+        <h1>美股每日行情<br>Night Shift Digest</h1>
+        <div class="meta">
+          <time datetime="2026-03-11T13:00:00+08:00">2026-03-11 13:00（北京 21:00）</time>
+          <span class="pill">AI Sentiment: Neutral +</span>
+        </div>
+      </div>
+      <p class="summary">三大指数震荡整理，市场资金仍集中在高流动性龙头。短线题材退潮后，风格向“盈利确定性 + 现金流质量”回归，盘面波动率边际提升。</p>
+
+      <section class="index-grid" aria-label="三大指数">
+        <article class="index-card">
+          <div class="index-k">标普500</div>
+          <div class="index-v">6704.98</div>
+          <div class="change down">-0.16%</div>
+        </article>
+        <article class="index-card">
+          <div class="index-k">道琼斯</div>
+          <div class="index-v">46839.23</div>
+          <div class="change up">+0.04%</div>
+        </article>
+        <article class="index-card">
+          <div class="index-k">纳斯达克</div>
+          <div class="index-v">22416.63</div>
+          <div class="change flat">+0.00%</div>
+        </article>
+      </section>
+    </header>
+
+    <section class="layout">
+      <section class="card">
+        <h2>热门股票 / Leaders</h2>
+        <ul class="rows">
+          <li class="row"><span class="name">苹果<span class="symbol">AAPL</span></span><span class="price">260.83</span><strong class="up">+0.37%</strong></li>
+          <li class="row"><span class="name">微软<span class="symbol">MSFT</span></span><span class="price">405.76</span><strong class="down">-0.89%</strong></li>
+          <li class="row"><span class="name">谷歌<span class="symbol">GOOGL</span></span><span class="price">307.04</span><strong class="up">+0.22%</strong></li>
+          <li class="row"><span class="name">亚马逊<span class="symbol">AMZN</span></span><span class="price">214.33</span><strong class="up">+0.39%</strong></li>
+          <li class="row"><span class="name">英伟达<span class="symbol">NVDA</span></span><span class="price">184.77</span><strong class="up">+1.16%</strong></li>
+          <li class="row"><span class="name">特斯拉<span class="symbol">TSLA</span></span><span class="price">399.24</span><strong class="up">+0.14%</strong></li>
+          <li class="row"><span class="name">Meta<span class="symbol">META</span></span><span class="price">654.07</span><strong class="up">+1.03%</strong></li>
+          <li class="row"><span class="name">AMD<span class="symbol">AMD</span></span><span class="price">203.23</span><strong class="up">+0.27%</strong></li>
+        </ul>
+      </section>
+
+      <aside class="card">
+        <h2>异动 + 观察</h2>
+        <ul class="rows flash">
+          <li class="row"><span class="name">GameStop<span class="symbol">GME</span></span><span class="price">24.37</span><strong class="down">-1.73%</strong></li>
+          <li class="row"><span class="name">AMC<span class="symbol">AMC</span></span><span class="price">1.11</span><strong class="down">-1.77%</strong></li>
+          <li class="row"><span class="name">Rivian<span class="symbol">RIVN</span></span><span class="price">16.54</span><strong class="up">+4.22%</strong></li>
+        </ul>
+        <div class="insights">
+          <p class="insight"><span class="badge">估值</span>S&P 500 估值仍处高位区间，注意仓位与波动容忍度匹配。</p>
+          <p class="insight"><span class="badge">风格</span>成长股内部开始分化，优先筛选盈利兑现路径清晰标的。</p>
+          <p class="insight"><span class="badge">节奏</span>若指数回落至关键支撑附近，再考虑分批回补高质量龙头。</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">本页面数据仅供参考，不构成投资建议。</footer>
   <main class="panel">
     <header class="header">
       <div class="title-wrap">
